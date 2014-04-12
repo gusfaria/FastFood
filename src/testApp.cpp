@@ -15,14 +15,21 @@ void testApp::setup() {
 	cam.initGrabber(320, 240);
 	
 	tracker.setup();
-    mouthRadius = 40;
     
     font16.loadFont("pastelaria.ttf", 16);
     font30.loadFont("pastelaria.ttf", 30);
     font22.loadFont("pastelaria.ttf", 22);
     fonttitle.loadFont("pastelaria.ttf", 150);
     
+    start();
     
+    loadXMLData();
+    cout << numberOfSavedScores << endl;
+}
+
+//--------------------------------------------------------------
+void testApp::start() {
+    ofBackground( 251, 146, 64 );
     //particle
     for (int i = 0; i < 50; i++){
         Particles p;
@@ -42,6 +49,7 @@ void testApp::setup() {
     myPos.set(ofGetWindowWidth()/2,ofGetWindowHeight()/2);
     
     //game mechanics
+    mouthRadius = 40;
     gamestate = 0;
     counter = 0;
     score = 0;
@@ -51,8 +59,6 @@ void testApp::setup() {
     startedNameEntry = false;
     bFirst  = false;
     
-    loadXMLData();
-    cout << numberOfSavedScores << endl;
 }
 
 //--------------------------------------------------------------
@@ -99,7 +105,7 @@ void testApp::update() {
         }
         
         //EYES FOCUS
-        float eyesToBurger = ofDist(burgerList[0].pos.x, burgerList[0].pos.y, eyePos.x, eyePos.y);
+        float eyesToBurger = ofDist(burgerList[0].pos.x, CCList[0].pos.y, eyePos.x, eyePos.y);
         ofPoint focus = burgerList[0].pos;
         leftEye.mousePos = focus;
         rightEye.mousePos = focus;
@@ -321,7 +327,14 @@ void testApp::keyPressed(int key) {
             username.append(1, (char)key);
         }
     } else {
-        if (key == 32) setup();
+        //SPACEBAR
+        if (key == 32) {
+            //            particleList.clear();
+            burgerList.clear();
+            gamestate = 1;
+            start();
+            tracker.reset();
+        }
         if (key == 'r')  tracker.reset();
         if (key == 'C')   bCam = !bCam;
         if (key == 'T')   ofToggleFullscreen() ;

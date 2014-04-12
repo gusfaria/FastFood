@@ -45,6 +45,7 @@ public:
 class testApp : public ofBaseApp {
 public:
 	void setup();
+    void start();
 	void update();
 	void draw();
     void keyPressed(int key);
